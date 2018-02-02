@@ -34,6 +34,54 @@ public class Paginator implements Serializable {
         this.page = computePageNo(page);
     }
 
+    private static int computeLastPageNumber(int totalItems, int pageSize) {
+        if (pageSize <= 0) return 1;
+        int result = totalItems % pageSize == 0 ?
+                totalItems / pageSize
+                : totalItems / pageSize + 1;
+        if (result <= 1)
+            result = 1;
+        return result;
+    }
+
+    private static int computePageNumber(int page, int pageSize, int totalItems) {
+        if (page <= 1) {
+            return 1;
+        }
+        if (Integer.MAX_VALUE == page
+                || page > computeLastPageNumber(totalItems, pageSize)) { //last page
+            return computeLastPageNumber(totalItems, pageSize);
+        }
+        return page;
+    }
+
+    private static Integer[] generateLinkPageNumbers(int currentPageNumber, int lastPageNumber, int count) {
+        int avg = count / 2;
+
+        int startPageNumber = currentPageNumber - avg;
+        if (startPageNumber <= 0) {
+            startPageNumber = 1;
+        }
+
+        int endPageNumber = startPageNumber + count - 1;
+        if (endPageNumber > lastPageNumber) {
+            endPageNumber = lastPageNumber;
+        }
+
+        if (endPageNumber - startPageNumber < count) {
+            startPageNumber = endPageNumber - count;
+            if (startPageNumber <= 0) {
+                startPageNumber = 1;
+            }
+        }
+
+        java.util.List<Integer> result = new java.util.ArrayList<>();
+        for (int i = startPageNumber; i <= endPageNumber; i++) {
+            result.add(i);
+        }
+        return result.toArray(new Integer[result.size()]);
+    }
+
     /**
      * 取得当前页。
      */
@@ -138,8 +186,6 @@ public class Paginator implements Serializable {
         return page > 0 ? (page - 1) * getLimit() : 0;
     }
 
-
-
     /**
      * 得到 总页数
      *
@@ -180,65 +226,15 @@ public class Paginator implements Serializable {
      * @return
      */
     public Integer[] slider(int slidersCount) {
-        return generateLinkPageNumbers(getPage(), (int) getTotalPages(), slidersCount);
-    }
-
-    private static int computeLastPageNumber(int totalItems, int pageSize) {
-        if (pageSize <= 0) return 1;
-        int result = (int) (totalItems % pageSize == 0 ?
-                totalItems / pageSize
-                : totalItems / pageSize + 1);
-        if (result <= 1)
-            result = 1;
-        return result;
-    }
-
-    private static int computePageNumber(int page, int pageSize, int totalItems) {
-        if (page <= 1) {
-            return 1;
-        }
-        if (Integer.MAX_VALUE == page
-                || page > computeLastPageNumber(totalItems, pageSize)) { //last page
-            return computeLastPageNumber(totalItems, pageSize);
-        }
-        return page;
-    }
-
-    private static Integer[] generateLinkPageNumbers(int currentPageNumber, int lastPageNumber, int count) {
-        int avg = count / 2;
-
-        int startPageNumber = currentPageNumber - avg;
-        if (startPageNumber <= 0) {
-            startPageNumber = 1;
-        }
-
-        int endPageNumber = startPageNumber + count - 1;
-        if (endPageNumber > lastPageNumber) {
-            endPageNumber = lastPageNumber;
-        }
-
-        if (endPageNumber - startPageNumber < count) {
-            startPageNumber = endPageNumber - count;
-            if (startPageNumber <= 0) {
-                startPageNumber = 1;
-            }
-        }
-
-        java.util.List<Integer> result = new java.util.ArrayList<Integer>();
-        for (int i = startPageNumber; i <= endPageNumber; i++) {
-            result.add(new Integer(i));
-        }
-        return result.toArray(new Integer[result.size()]);
+        return generateLinkPageNumbers(getPage(), getTotalPages(), slidersCount);
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("Paginator");
-        sb.append("{page=").append(page);
-        sb.append(", limit=").append(limit);
-        sb.append(", totalCount=").append(totalCount);
-        sb.append('}');
-        return sb.toString();
+        return "Paginator" +
+                "{page=" + page +
+                ", limit=" + limit +
+                ", totalCount=" + totalCount +
+                '}';
     }
 }

@@ -21,7 +21,7 @@ public class PageBounds extends RowBounds implements Serializable {
     /** 分页大小 */
     protected int limit = NO_ROW_LIMIT;
     /** 分页排序信息 */
-    protected List<Order> orders = new ArrayList<Order>();
+    protected List<Order> orders = new ArrayList<>();
     /** 结果集是否包含TotalCount */
     protected boolean containsTotalCount;
 
@@ -56,11 +56,11 @@ public class PageBounds extends RowBounds implements Serializable {
     }
 
     public PageBounds(int page, int limit) {
-        this(page, limit, new ArrayList<Order>(), true);
+        this(page, limit, new ArrayList<>(), true);
     }
 
     public PageBounds(int page, int limit, boolean containsTotalCount) {
-        this(page, limit, new ArrayList<Order>(), containsTotalCount);
+        this(page, limit, new ArrayList<>(), containsTotalCount);
     }
 
     /**
@@ -146,13 +146,12 @@ public class PageBounds extends RowBounds implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("PageBounds{");
-        sb.append("page=").append(page);
-        sb.append(", limit=").append(limit);
-        sb.append(", orders=").append(orders);
-        sb.append(", containsTotalCount=").append(containsTotalCount);
-        sb.append(", asyncTotalCount=").append(asyncTotalCount);
-        sb.append('}');
-        return sb.toString();
+        String sb = "PageBounds{" + "page=" + page +
+                ", limit=" + limit +
+                ", orders=" + orders +
+                ", containsTotalCount=" + containsTotalCount +
+                ", asyncTotalCount=" + asyncTotalCount +
+                '}';
+        return sb;
     }
 }

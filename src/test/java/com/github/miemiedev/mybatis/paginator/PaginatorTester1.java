@@ -10,9 +10,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author miemiedev
@@ -55,7 +53,9 @@ public class PaginatorTester1 extends SimulateBaseDao{
 
             return session.selectList("db.table.city.findByCity", city, pageBounds);
         }finally {
-            session.close();
+            if (session != null){
+                session.close();
+            }
         }
 
     }

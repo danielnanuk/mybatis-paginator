@@ -21,7 +21,7 @@ public class OracleDialect extends Dialect{
 			isForUpdate = true;
 		}
 		
-		StringBuffer pagingSelect = new StringBuffer( sql.length()+100 );
+		StringBuilder pagingSelect = new StringBuilder( sql.length()+100 );
 		if (offset > 0) {
 			pagingSelect.append("select * from ( select row_.*, rownum rownum_ from ( ");
 		}

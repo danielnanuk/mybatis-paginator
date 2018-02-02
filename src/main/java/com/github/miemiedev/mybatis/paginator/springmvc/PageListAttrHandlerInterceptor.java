@@ -15,11 +15,11 @@ import java.util.Map;
  */
 public class PageListAttrHandlerInterceptor extends HandlerInterceptorAdapter {
 
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o) {
         return true;
     }
 
-    public void postHandle(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) {
         Enumeration enumeration = request.getAttributeNames();
         while (enumeration.hasMoreElements()){
             Object element = enumeration.nextElement();
@@ -35,7 +35,7 @@ public class PageListAttrHandlerInterceptor extends HandlerInterceptorAdapter {
         }
         if(modelAndView != null){
             Map<String,Object> model = modelAndView.getModel();
-            Map<String,Object> newModel = new HashMap<String, Object>();
+            Map<String,Object> newModel = new HashMap<>();
             for(Map.Entry<String, Object> item : model.entrySet()){
                 Object attr = item.getValue();
                 if(attr instanceof PageList){
@@ -48,7 +48,7 @@ public class PageListAttrHandlerInterceptor extends HandlerInterceptorAdapter {
         }
     }
 
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o, Exception e) {
 
     }
 }

@@ -29,7 +29,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
  * @author poplar.yfyang
  * @author miemiedev
  */
@@ -47,15 +46,15 @@ public class SQLHelp {
      * @throws java.sql.SQLException sql查询错误
      */
     public static int getCount(
-                               final MappedStatement mappedStatement, final Transaction transaction, final Object parameterObject,
-                               final BoundSql boundSql, Dialect dialect) throws SQLException {
+            final MappedStatement mappedStatement, final Transaction transaction, final Object parameterObject,
+            final BoundSql boundSql, Dialect dialect) throws SQLException {
         final String count_sql = dialect.getCountSQL();
         logger.debug("Total count SQL [{}] ", count_sql);
         logger.debug("Total count Parameters: {} ", parameterObject);
 
         Connection connection = transaction.getConnection();
         PreparedStatement countStmt = connection.prepareStatement(count_sql);
-        DefaultParameterHandler handler = new DefaultParameterHandler(mappedStatement,parameterObject,boundSql);
+        DefaultParameterHandler handler = new DefaultParameterHandler(mappedStatement, parameterObject, boundSql);
         handler.setParameters(countStmt);
 
         ResultSet rs = countStmt.executeQuery();

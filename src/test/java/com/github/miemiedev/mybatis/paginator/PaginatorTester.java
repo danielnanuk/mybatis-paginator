@@ -48,12 +48,14 @@ public class PaginatorTester extends SimulateBaseDao{
         SqlSession session = null;
         try{
             session = getSqlSession();
-            Map<String, Object> params = new HashMap<String, Object>();
+            Map<String, Object> params = new HashMap<>();
             params.put("code",code);
 
             return session.selectList("db.table.city.findByCity", params, pageBounds);
         }finally {
-            session.close();
+            if (session != null) {
+                session.close();
+            }
         }
 
     }

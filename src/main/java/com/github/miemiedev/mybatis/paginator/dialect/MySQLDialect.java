@@ -4,17 +4,17 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import org.apache.ibatis.mapping.MappedStatement;
 
 /**
- *  @author badqiu
- *  @author miemiedev
+ * @author badqiu
+ * @author miemiedev
  */
-public class MySQLDialect extends Dialect{
+public class MySQLDialect extends Dialect {
 
     public MySQLDialect(MappedStatement mappedStatement, Object parameterObject, PageBounds pageBounds) {
         super(mappedStatement, parameterObject, pageBounds);
     }
-    
-	protected String getLimitString(String sql, String offsetName,int offset, String limitName, int limit) {
-        StringBuffer buffer = new StringBuffer( sql.length()+20 ).append(sql);
+
+    protected String getLimitString(String sql, String offsetName, int offset, String limitName, int limit) {
+        StringBuilder buffer = new StringBuilder(sql.length() + 20).append(sql);
         if (offset > 0) {
             buffer.append(" limit ?, ?");
             setPageParameter(offsetName, offset, Integer.class);
@@ -24,6 +24,6 @@ public class MySQLDialect extends Dialect{
             setPageParameter(limitName, limit, Integer.class);
         }
         return buffer.toString();
-	}   
-  
+    }
+
 }

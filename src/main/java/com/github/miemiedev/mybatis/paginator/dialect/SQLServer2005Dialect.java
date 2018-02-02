@@ -35,8 +35,8 @@ public class SQLServer2005Dialect extends Dialect{
 	 * @return A new SQL statement with the LIMIT clause applied.
 	 */
     protected String getLimitString(String sql, String offsetName,int offset, String limitName, int limit) {
-		StringBuffer pagingBuilder = new StringBuffer();
-		String orderby = getOrderByPart(sql);
+		StringBuilder pagingBuilder = new StringBuilder();
+		String orderBy = getOrderByPart(sql);
 		String distinctStr = "";
 
 		String loweredString = sql.toLowerCase();
@@ -52,26 +52,25 @@ public class SQLServer2005Dialect extends Dialect{
 		pagingBuilder.append(sqlPartString);
 
 		// if no ORDER BY is specified use fake ORDER BY field to avoid errors
-		if (orderby == null || orderby.length() == 0) {
-			orderby = "ORDER BY CURRENT_TIMESTAMP";
+		if (orderBy.length() == 0) {
+			orderBy = "ORDER BY CURRENT_TIMESTAMP";
 		}
 
-		StringBuffer result = new StringBuffer();
-		result.append("WITH query AS (SELECT ")
-				.append(distinctStr)
-				.append("TOP 100 PERCENT ")
-				.append(" ROW_NUMBER() OVER (")
-				.append(orderby)
-				.append(") as __row_number__, ")
-				.append(pagingBuilder)
-				.append(") SELECT * FROM query WHERE __row_number__ > ? AND __row_number__ <= ?")
-				.append(" ORDER BY __row_number__");
+        String result = "WITH query AS (SELECT " +
+                distinctStr +
+                "TOP 100 PERCENT " +
+                " ROW_NUMBER() OVER (" +
+                orderBy +
+                ") as __row_number__, " +
+                pagingBuilder +
+                ") SELECT * FROM query WHERE __row_number__ > ? AND __row_number__ <= ?" +
+                " ORDER BY __row_number__";
         setPageParameter(offsetName,offset,Integer.class);
         setPageParameter("__offsetEnd",offset+limit,Integer.class);
-		return result.toString();
+		return result;
 	}
 
-	static String getOrderByPart(String sql) {
+	private static String getOrderByPart(String sql) {
 		String loweredString = sql.toLowerCase();
 		int orderByIndex = loweredString.indexOf("order by");
 		if (orderByIndex != -1) {

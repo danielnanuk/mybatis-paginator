@@ -44,9 +44,9 @@ import java.util.stream.Collectors;
         method = "query",
         args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
 public class OffsetLimitInterceptor implements Interceptor {
-    static int MAPPED_STATEMENT_INDEX = 0;
-    static int PARAMETER_INDEX = 1;
-    static int ROWBOUNDS_INDEX = 2;
+    final int MAPPED_STATEMENT_INDEX = 0;
+    final int PARAMETER_INDEX = 1;
+    final int ROWBOUNDS_INDEX = 2;
     static ExecutorService Pool;
     private static Logger logger = LoggerFactory.getLogger(OffsetLimitInterceptor.class);
     String dialectClass;

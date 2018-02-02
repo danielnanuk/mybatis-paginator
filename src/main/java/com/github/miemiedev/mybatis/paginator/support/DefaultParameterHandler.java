@@ -54,6 +54,7 @@ public class DefaultParameterHandler implements ParameterHandler {
         return parameterObject;
     }
 
+    @SuppressWarnings("unchecked")
     public void setParameters(PreparedStatement ps) throws SQLException {
         ErrorContext.instance().activity("setting parameters").object(mappedStatement.getParameterMap().getId());
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
@@ -62,8 +63,13 @@ public class DefaultParameterHandler implements ParameterHandler {
             for (int i = 0; i < parameterMappings.size(); i++) {
                 ParameterMapping parameterMapping = parameterMappings.get(i);
                 if (parameterMapping.getMode() != ParameterMode.OUT) {
-                    Object value;
                     String propertyName = parameterMapping.getProperty();
+                    TypeHandler typeHandler = parameterMapping.getTypeHandler();
+                    if (typeHandler == null) {
+                        throw new ExecutorException("There was no TypeHandler found for parameter " + propertyName + " of statement " + mappedStatement.getId());
+                    }
+
+                    Object value;
                     if (boundSql.hasAdditionalParameter(propertyName)) { // issue #448 ask first for additional params
                         value = boundSql.getAdditionalParameter(propertyName);
                     } else if (parameterObject == null) {
@@ -73,10 +79,7 @@ public class DefaultParameterHandler implements ParameterHandler {
                     } else {
                         value = metaObject == null ? null : metaObject.getValue(propertyName);
                     }
-                    TypeHandler typeHandler = parameterMapping.getTypeHandler();
-                    if (typeHandler == null) {
-                        throw new ExecutorException("There was no TypeHandler found for parameter " + propertyName + " of statement " + mappedStatement.getId());
-                    }
+
                     JdbcType jdbcType = parameterMapping.getJdbcType();
                     if (value == null && jdbcType == null) jdbcType = configuration.getJdbcTypeForNull();
                     typeHandler.setParameter(ps, i + 1, value, jdbcType);

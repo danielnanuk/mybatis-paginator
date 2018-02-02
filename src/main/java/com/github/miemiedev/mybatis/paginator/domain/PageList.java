@@ -1,6 +1,5 @@
 package com.github.miemiedev.mybatis.paginator.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 

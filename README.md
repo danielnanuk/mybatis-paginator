@@ -23,3 +23,6 @@ Downloading from the Maven central repository
 
 
 Thanks for [rapid-framework](https://code.google.com/p/rapid-framework) and [plum](https://github.com/yfyang/plum) author.
+
++ 解决了未设置分页数或者设置最大分页数为Integer.MAX_VALUE时，返回PageList的paginator为null的问题
++ jdk版本设定到1.8

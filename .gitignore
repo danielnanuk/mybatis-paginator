@@ -1,2 +1,4 @@
-.idea
+target/
 mybatis-paginator.iml
+mybatis-paginator.ipr
+mybatis-paginator.iws
